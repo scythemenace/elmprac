@@ -27,4 +27,100 @@ type State = Welcome
 ```
 
 ```type State``` has to be added to something that is also a state data type (called Model - written as ```type alias Model```)
-Regards to animation slot, only thing that is in the ``` type alias Model ``` is time
+Regards to animation slot, only thing that is in the ``` type alias Model ``` is time (we use ```model.time```)
+
+It looks like this
+
+```
+type alias State
+    {
+        time: Float,
+        state: State
+    }
+
+```
+
+```state: State``` means we are just using that datatype to keep track of states being changed.
+
+Then there is a function called ```view``` that takes in the model and displays it.
+
+The code is somewhat like this:-
+
+```
+view model = collage 192 128 (myShapes model)
+
+```
+In the above code the function ```collage``` converts our Shapes into SVG and embed that into HTML in order to view them.
+We are converting ```myShapes model``` into an SVG which has a dimension of 192 x 128.
+
+Here is a sample code for myShapes model:-
+
+```
+myShapes model model =
+    case model.state of 
+        Welcome -> 
+            [ text "Welcome"
+                |> centered
+                |> filled black
+            , group
+                [ roundedRect 40 25 5 
+                    |> filled green
+                , text "Transition 3"
+                    |> centered
+                    |> size 8
+                    |> filled black
+                    |> move (0, -3)
+
+                ]
+                    |> move (0, -25)
+                    |> notifyTap Transition1
+            
+            ]
+        State2 -> 
+            [ text "State 2"
+                |> centered
+                |> filled black
+            , group
+                [ roundedRect 40 25 5 
+                    |> filled green
+                , text "Transition 4"
+                    |> centered
+                    |> size 8
+                    |> filled black
+                    |> move (0, -3)
+
+                ]
+                    |> move (0, -25)
+                    |> notifyTap Transition2 
+            
+            ]
+
+```
+What is happening in the above code, is that the roundedRect and the text form a button, and the notifyTap function checks for user input i.e. if the user clicks on that button and returns an output.
+
+Then we have the update
+```
+update msg model = 
+    case msg of 
+        Tick t ->
+            { model | time = t }
+        Transition3 ->
+            case model.state of
+                Welcome ->
+                    { model | state = State2 }
+                otherwise ->
+                    model
+        Transition4 ->
+            case model.state of 
+                State2 ->
+                    { model | state = Welcome }
+            otherwise ->
+                model
+```
+
+In the above code, our case expression matches the messages i.e. the inputs we are getting from the app. The ```Tick``` message checks if an animation is going on and makes sure they have the correct time, so the animation is moving properly.
+
+If we get ```Transition3``` then we run another ```case``` which checks if our state is Welcome. If it is then it transitions it to the mentioned state which is ```State2``` in this case, otherwise, it will just lead to model.
+
+If we get ```Transition4``` then we run another ```case``` which checks if our state is State2. If it is then it transitions it to the mentioned state which is ```Welcome``` in this case, otherwise it will just lead to model.
+
