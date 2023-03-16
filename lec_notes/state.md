@@ -13,5 +13,18 @@ Maybe, if we have a game, where we want a feature that if a user falls on a trap
 ## Code part
 We create two types:- In this context, we call one of the types ```State``` (we can call it anything, but in this context calling this custom data type State helps us understand what it is in context to this App) and the other data type is ```Msg```(We could have called it transitions, but we call it ```Msg``` to stick to the convention of Elm because Msg is a type used in ```View```)
 
+It looks somewhat like this
+```
+type Msg = Tick Float GetKeyState
+            | Transition 1
+            | Transition 2
+
+type State = Welcome
+            | State 2 
+
+-- We only have two states in this example
+
+```
+
 ```type State``` has to be added to something that is also a state data type (called Model - written as ```type alias Model```)
-Regards to animation slot, only thing that is in the ``` type alias Model `` is time
+Regards to animation slot, only thing that is in the ``` type alias Model ``` is time
