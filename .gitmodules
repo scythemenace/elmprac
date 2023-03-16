@@ -1,0 +1,3 @@
+[submodule "srcfiles/sourcecodeelm"]
+	path = srcfiles/sourcecodeelm
+	url = git@github.com:scythemenace/sourcecodeelm.git
